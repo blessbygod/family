@@ -1,0 +1,67 @@
+.f-left {
+  float: left; }
+
+.top0 {
+  top: 0px !important;
+  overflow: hidden !important; }
+
+.spade {
+  height: 164px;
+  width: 118px;
+  background-image: url("../images/spade.jpg");
+  background-size: 550% 320%; }
+
+.heart {
+  height: 164px;
+  width: 118px;
+  background-image: url("../images/heart.jpg");
+  background-size: 550% 320%; }
+
+.club {
+  height: 164px;
+  width: 118px;
+  background-image: url("../images/club.jpg");
+  background-size: 550% 320%; }
+
+.diamond {
+  height: 160px;
+  width: 118px;
+  background-image: url("../images/diamond.jpg?r=1");
+  background-size: 550% 320%; }
+
+/* 未找到方块扑克牌素材 暂时用小号的 */
+.spade_2, .heart_2, .club_2, .diamond_2 {
+  background-position: 517px 0px; }
+
+.spade_3, .heart_3, .club_3, .diamond_3 {
+  background-position: 384px 0px; }
+
+.spade_4, .heart_4, .club_4, .diamond_4 {
+  background-position: 251px 0px; }
+
+.spade_5, .heart_5, .club_5, .diamond_5 {
+  background-position: 118px 0px; }
+
+.spade_6, .heart_6, .club_6, .diamond_6 {
+  background-position: 0px 339px; }
+
+.spade_7, .heart_7, .club_7, .diamond_7 {
+  background-position: 517px 339px; }
+
+.spade_8, .heart_8, .club_8, .diamond_8 {
+  background-position: 384px 339px; }
+
+.spade_9, .heart_9, .club_9, .diamond_9 {
+  background-position: 251px 339px; }
+
+.spade_10, .heart_10, .club_10, .diamond_10 {
+  background-position: 118px 339px; }
+
+.spade_11, .heart_11, .club_11, .diamond_11 {
+  background-position: 0px 164px; }
+
+.spade_12, .heart_12, .club_12, .diamond_12 {
+  background-position: 517px 164px; }
+
+.spade_13, .heart_13, .club_13, .diamond_13 {
+  background-position: 384px 164px; }

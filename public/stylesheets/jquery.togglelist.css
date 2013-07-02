@@ -1,0 +1,55 @@
+.from_list_container,.to_list_container,.action_area{
+    width: 300px;
+    height: 500px;
+    border: 1px solid #aaa;
+    float: left;
+    margin: 10px 5px 10px 5px;
+}
+.action_area{
+    width: 80px;
+    border:none;
+    vertical-align: middle;
+    text-align: center;
+}
+.action_area i{
+    display: block;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.from_list_container .title,.to_list_container .title{
+   background-color: #aaa;
+   color: #fff;
+   padding: 5px 5px;
+ }
+.from_list_container .title i,.to_list_container .title i{
+    cursor: pointer;
+}
+.search{
+    margin: 10px 10px;
+}
+.from_list,.to_list{
+    margin: 15px;
+}
+.from_list li,.to_list li{
+    list-style: none;
+    height: 40px;
+    line-height: 40px;
+}
+.status_action{
+    cursor: pointer;
+    float: right;
+    vertical-align: middle;
+}
+.status_class_1{
+    color: green;
+}
+.status_class_2{
+    color: gray;
+}
+.pagination-select{
+    text-align: center;
+    float: left !important;
+    height: 36px !important;
+}

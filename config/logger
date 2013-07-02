@@ -1,0 +1,46 @@
+{
+  "attrs": {
+    "pop": {
+      "fields":{
+        "bucket":{
+          "name": "桶号"
+        },
+        "response_time_fast":{
+          "name": "占90%的最快平均响应时间"
+        },
+        "response_time_slow":{
+          "name": "占10%的最慢平均响应时间"
+        },
+        "retr_sumtotal":{
+          "name": "RETR总数"
+        },
+        "prefetch_sumtotal":{
+          "name": "Prefetch总数"
+        }
+      }
+    }
+  },
+  "treeview": {
+    "id": "logger",
+    "text": "最近5分钟企邮日志汇总分析",
+      "expanded": true,
+      "children": [{
+        "id": "pop",
+        "text": "pop",
+        "leaf": true
+      },{
+        "id": "hooper",
+        "text": "hooper",
+        "leaf": true
+      },{
+        "text": "imap",
+        "leaf": true
+      },{
+        "text": "biz_admin",
+        "leaf": true
+      },{
+        "text": "biz_domain",
+        "leaf": true
+      }]
+  }
+}

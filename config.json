@@ -1,0 +1,7 @@
+{
+	"pusher": {
+		"appId": "family",
+		"key": 		"",
+		"secret": "YOUR_APP_SECRET"
+	}
+}
