@@ -99,8 +99,6 @@
                 _container.listStatusHash[key] = list;
             });
             _.each(options.to_list,function(list){
-                list.statusText = options.status_text_1;
-                list.statusClass = options.status_class_1;
                 var key = list[options.itemId];
                 _container.toListStatusHash[key] = list;
             });
