@@ -50,8 +50,8 @@
                 '<div class="list_container">',
                     '<ul class="to_list">',
                     '</ul>',
-                    '<div class="pagination">',
-                    '</div>',
+                '</div>',
+                '<div class="pagination">',
                 '</div>',
             '</div>'
         ].join('');
