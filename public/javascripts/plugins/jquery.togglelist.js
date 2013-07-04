@@ -93,11 +93,16 @@
             this.listStatusHash = {};
             this.toListStatusHash = {};
             _.each(options.from_list,function(list){
-                list.status = false;
+                list.statusText =  list.status === true ? options.status_text_2 : options.status_text_1;
+                list.statusClass = list.status === true ? options.status_class_2 : options.status_class_1;
+                var key = list[options.itemId];
+                _container.listStatusHash[key] = list;
+            });
+            _.each(options.to_list,function(list){
                 list.statusText = options.status_text_1;
                 list.statusClass = options.status_class_1;
                 var key = list[options.itemId];
-                _container.listStatusHash[key] = list;
+                _container.toListStatusHash[key] = list;
             });
         };
         //为分页做准备，可以用ajax代替该内容
@@ -117,6 +122,9 @@
             var renderList = this.spliceListHashByCountAndPage(this.listStatusHash);
             this.renderList(this.$fromList, renderList);
             this.renderPagination(this.$fromPagination, this.listStatusHash);
+            renderList = this.spliceListHashByCountAndPage(this.toListStatusHash);
+            this.renderList(this.$toList, renderList, true);
+            this.renderPagination(this.$toPagination, this.toListStatusHash, 1, true);
         };
         //渲染容器模板
         this.renderTemplate = function(){
@@ -273,7 +281,7 @@
             $li.remove();
             //渲染待选已选列表
             var renderList = this.spliceListHashByCountAndPage(this.toListStatusHash,to_current_page);
-            if(renderList.length===0){
+            if(renderList.length === 0){
                 to_current_page--;
                 renderList = this.spliceListHashByCountAndPage(this.toListStatusHash,to_current_page);
             }
