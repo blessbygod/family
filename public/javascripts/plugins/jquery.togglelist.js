@@ -292,6 +292,7 @@
             var id  = $li.data('id');
             var item = this.listStatusHash[id];
             delete this.toListStatusHash[id]; 
+            delete this.toSearchListStatusHash[id];
             $li.remove();
             //渲染待选已选列表
             _container._renderList(true, true, null, true);
