@@ -191,7 +191,7 @@
                 current_page = parseInt($select.val(), 10);
             }
             var keyword = isTo ? this.$toSearch.val() : this.$search.val();
-            if(keyword !== ""){
+            if(keyword){
                 keyword = keyword.replace(/\s+/,' ');
             }else{
                 keyword = " ";
@@ -332,7 +332,7 @@
             }
             _container.timer = setTimeout(function(){
                 var keyword = $el.val();
-                if(keyword !== ""){
+                if(keyword){
                     keyword = keyword.replace(/\s+/,' ');
                 }else{
                     keyword = " ";
@@ -374,7 +374,7 @@
             var current_page = 1;
             var list = {};
             var keyword = this.isTo ? _container.$toSearch.val() : _container.$search.val();
-            if(keyword !== ""){
+            if(keyword){
                 keyword = keyword.replace(/\s+/,' ');
             }else{
                 keyword = " ";
