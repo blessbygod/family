@@ -92,6 +92,8 @@
         this.initListStatusHash = function(){
             this.listStatusHash = {};
             this.toListStatusHash = {};
+            this.searchListStatusHash = {};
+            this.toSearchListStatusHash = {};
             _.each(options.from_list,function(list){
                 list.statusText =  list.status === true ? options.status_text_2 : options.status_text_1;
                 list.statusClass = list.status === true ? options.status_class_2 : options.status_class_1;
@@ -103,26 +105,11 @@
                 _container.toListStatusHash[key] = list;
             });
         };
-        //为分页做准备，可以用ajax代替该内容
-        this.spliceListHashByCountAndPage = function(listHash, page){
-            page = page || 1;
-            var renderList = []; 
-            if(_.isObject(listHash) === true){
-                var start = (page-1) * options.page_count;
-                var end = options.page_count * page;
-                renderList = _.values(listHash).slice(start, end);
-            } 
-            return renderList;
-        };
         //渲染容器
         this.render = function(){
             this.renderTemplate();
-            var renderList = this.spliceListHashByCountAndPage(this.listStatusHash);
-            this.renderList(this.$fromList, renderList);
-            this.renderPagination(this.$fromPagination, this.listStatusHash);
-            renderList = this.spliceListHashByCountAndPage(this.toListStatusHash);
-            this.renderList(this.$toList, renderList, true);
-            this.renderPagination(this.$toPagination, this.toListStatusHash, 1, true);
+            this._renderList(false, true); //from组件初始化
+            this._renderList(true, true); //to组件初始化
         };
         //渲染容器模板
         this.renderTemplate = function(){
@@ -139,6 +126,17 @@
             this.$toList = $('.to_list');
             this.$fromPagination = this.$fromContainer.find('.pagination');
             this.$toPagination = this.$toContainer.find('.pagination');
+        };
+        //为分页做准备，可以用ajax代替该内容
+        this.spliceListHashByCountAndPage = function(listHash, page){
+            page = page || 1;
+            var renderList = []; 
+            if(_.isObject(listHash) === true){
+                var start = (page-1) * options.page_count;
+                var end = options.page_count * page;
+                renderList = _.values(listHash).slice(start, end);
+            } 
+            return renderList;
         };
         //填充列表
         this.renderList = function($listContainer,list,isTo){
@@ -171,7 +169,57 @@
                     list: list,
                     isTo: isTo 
                 })
-            }); 
+            });
+        };
+        //处理渲染模板的类型[from,to(search,sort)],是否需要初始化分页
+        this._renderList = function(isTo, initPagination, listStatusHash, isHighLight){
+            var $list = null,
+                $pagination = null,
+                list = {},
+                current_page = 1;
+            if(isTo){
+                $list = this.$toList;
+                $pagination = this.$toPagination;
+                list  = this.toListStatusHash;
+            }else{
+                $list = this.$fromList;
+                $pagination = this.$fromPagination;
+                list  = this.listStatusHash;
+            }
+            $select = $pagination.$select;
+            if($select){
+                current_page = parseInt($select.val(), 10);
+            }
+            var keyword = isTo ? this.$toSearch.val() : this.$search.val();
+            if(keyword !== ""){
+                keyword = keyword.replace(/\s+/,' ');
+            }else{
+                keyword = " ";
+            }
+            if(keyword !== ' '){
+                list = isTo ? this.toSearchListStatusHash : this.searchListStatusHash; //分页必须保存数据,排序会重置from，to，search的数据。
+            }
+            //如果listStatusHash有值,则使用该值
+            if(_.isObject(listStatusHash) && _.keys(listStatusHash).length){
+                list = listStatusHash;
+            }
+            var renderList = this.spliceListHashByCountAndPage(list, current_page);
+            if(renderList.length === 0){
+                current_page--;
+                renderList = this.spliceListHashByCountAndPage(list, current_page); 
+            }
+            this.renderList($list, renderList, isTo);
+            //是否初始化分页组件
+            if(initPagination){
+                this.renderPagination($pagination, list, current_page, isTo);
+            }
+            if(isHighLight){
+                if(keyword !== ' '){
+                    var _html = $list.html();
+                    _html = this.highLightSearchKeyWord(_html, keyword);
+                    $list.html(_html);
+                }
+            }
         };
         //绑定事件
         this.bindEvents = function(){
@@ -201,37 +249,7 @@
             }));
         };
         this.selectChangeFunc = function(e){
-            var $list = null;
-            var current_page = 0,
-                $select = null,
-                list = {},
-                $pagination = null;
-            var keyword = this.isTo ? _container.$toSearch.val() : _container.$search.val();
-            if(!this.isTo){
-                $pagination = _container.$fromPagination;
-                $select = $pagination.$select;
-                current_page = parseInt($select.val(), 10);
-                from_current_page = current_page;
-                $list = _container.$fromList;
-                list = _container.listStatusHash;
-            }else{
-                $pagination = _container.$toPagination;
-                $select = $pagination.$select;
-                current_page = parseInt($select.val(), 10);
-                to_current_page = current_page;
-                $list = _container.$toList;
-                list = _container.toListStatusHash;
-            }
-            if(keyword !== ''){
-               list = _container.searchListStatusHash;
-            }
-            var renderList = _container.spliceListHashByCountAndPage(list,current_page);
-            _container.renderList($list, renderList,this.isTo);
-            if(keyword !== ''){
-                var _html = $list.html();
-                _html = _container.highLightSearchKeyWord(_html, keyword);
-                $list.html(_html);
-            }
+            _container._renderList(this.isTo, false, null, true);
         };
         //同步item添加状态
         this.syncFromItemStatus = function(item, status){
@@ -265,9 +283,7 @@
                 this.toListStatusHash[id] = item;
             }
             //渲染已选列表
-            var renderList = this.spliceListHashByCountAndPage(this.toListStatusHash,to_current_page);
-            this.renderList(this.$toList, renderList, true);
-            this.renderPagination(this.$toPagination, this.toListStatusHash, to_current_page, true);
+            _container._renderList(true, true, null, true);
         };
         //删除已选到待选
         this.to2From = function(e){
@@ -278,17 +294,10 @@
             delete this.toListStatusHash[id]; 
             $li.remove();
             //渲染待选已选列表
-            var renderList = this.spliceListHashByCountAndPage(this.toListStatusHash,to_current_page);
-            if(renderList.length === 0){
-                to_current_page--;
-                renderList = this.spliceListHashByCountAndPage(this.toListStatusHash,to_current_page);
-            }
-            this.renderList(this.$toList, renderList, true);
-            this.renderPagination(this.$toPagination, this.toListStatusHash, to_current_page, true);
+            _container._renderList(true, true, null, true);
             //置待选列表状态为默认值
             this.syncFromItemStatus(item);
-            renderList = this.spliceListHashByCountAndPage(this.listStatusHash,from_current_page);
-            this.renderList(this.$fromList, renderList);
+            _container._renderList(false, false, null, true);
         };
         //高亮搜索匹配的字体
         this.highLightSearchKeyWord = function(source, keyword){
@@ -300,7 +309,7 @@
             var keywordArr = keyword.split(' ');
             var regExps = '';
             _.each( keywordArr,function( key ){
-                if( regExps ){
+                if(regExps){
                     regExps += '|' + '(?!<[^>]*)(' + key + ')(?![^<]*>)';
                 }else{
                     regExps += '(?!<[^>]*)(' + key + ')(?![^<]*>)';
@@ -316,12 +325,7 @@
         this.filterListStatusHash = function(e){
             var $el = $(e.currentTarget);
             var self = this;
-            var $pagination = null;
-            if(this.isTo){
-                $pagination = _container.$toPagination;
-            }else{
-                $pagination = _container.$fromPagination;
-            }
+            var searchListStatusHash = {};
             if(_container.timer){
                 clearTimeout(_container.timer);
             }
@@ -332,7 +336,6 @@
                 }else{
                     keyword = " ";
                 }
-                _container.searchListStatusHash = {};
                 if(keyword != " "){
                     _.map(self.list,function(item, key){
                         var result = true;//包含多关键词,目前是交集，以后可以选择交并集
@@ -341,32 +344,25 @@
                         _.each(keywordArr,function(keyword){
                             if(text.indexOf(keyword) === -1){
                                 result = false;
-                            } 
+                            }
                         });
                         if(result){
-                           _container. searchListStatusHash[key] = item;
+                           searchListStatusHash[key] = item;
                         }
                     });
+                    if(self.isTo){
+                       _container.toSearchListStatusHash = searchListStatusHash; 
+                    }else{
+                       _container.searchListStatusHash = searchListStatusHash;
+                    }
                 }else{
-                    _container.searchListStatusHash = self.list;
+                    if(self.isTo){
+                       _container.toSearchListStatusHash = self.list; 
+                    }else{
+                       _container.searchListStatusHash = self.list;
+                    }
                 }
-                $pagination.pagination({
-                    count: _.keys(_container.searchListStatusHash).length,
-                    page_count : options.page_count,
-                    callback: _.bind(_container.selectChangeFunc,{
-                        list: _container.searchListStatusHash,
-                        isTo: self.isTo 
-                    })
-                }); 
-                //渲染搜索列表
-                var renderList = _container.spliceListHashByCountAndPage(_container.searchListStatusHash);
-                _container.renderList(self.$list, renderList, self.isTo);
-                //高亮列表
-                if(keyword !== ' '){
-                    var _html = self.$list.html();
-                    _html = _container.highLightSearchKeyWord(_html, keyword);
-                    self.$list.html(_html);
-                }
+                _container._renderList(self.isTo, true, searchListStatusHash, true);
             },800);
         };
         //排序列表方法
@@ -377,13 +373,23 @@
             var current_page = 1;
             var list = {};
             var keyword = this.isTo ? _container.$toSearch.val() : _container.$search.val();
-            if(this.isTo){
-                list = _container.toListStatusHash;
+            if(keyword !== ""){
+                keyword = keyword.replace(/\s+/,' ');
             }else{
-                list = _container.listStatusHash;
+                keyword = " ";
             }
-            if(keyword !== ''){
-                list = _container.searchListStatusHash;
+            if(this.isTo){
+                if(keyword !== ' '){
+                    list = _container.toSearchListStatusHash;
+                }else{
+                    list = _container.toListStatusHash;
+                }
+            }else{
+                if(keyword !== ' '){
+                    list = _container.searchListStatusHash;
+                }else{
+                    list = _container.listStatusHash;
+                }
             }
             var sortListStatusHash = {},
                 keys = [];
@@ -409,24 +415,20 @@
             _.each(keys,function(key){
                 sortListStatusHash[key] = list[key];
             });
-            if(keyword !== ''){
-                _container.searchListStatusHash = sortListStatusHash;
-            }else{
-                if(this.isTo){
-                    current_page = to_current_page;
+            if(this.isTo){
+                if(keyword !== ' '){
                     _container.toListStatusHash = sortListStatusHash;
                 }else{
-                    current_page = from_current_page;
+                    _container.toSearchListStatusHash = sortListStatusHash;
+                }
+            }else{
+                if(keyword !== ' '){
                     _container.listStatusHash = sortListStatusHash;
+                }else{
+                    _container.searchListStatusHash = sortListStatusHash;
                 }
             }
-            var renderList = _container.spliceListHashByCountAndPage(sortListStatusHash, current_page);
-            _container.renderList(this.$list, renderList, this.isTo);
-            if(keyword !== ''){
-                var _html = this.$list.html();
-                _html = _container.highLightSearchKeyWord(_html, keyword);
-                this.$list.html(_html);
-            }
+            _container._renderList(this.isTo, false, sortListStatusHash, true);
         };
         this.initialize();
         return this;
