@@ -8,7 +8,7 @@
 (function($,_,undefined){
     $.fn.pagination = function(options){
         var $container = $(this);
-        var self = this;
+        var _container = this;
         //初始化参数
         var template = [
             '<ul class="pull-right">',
@@ -43,6 +43,7 @@
                 template: template,
                 callback: function(){}
             },options);
+            this.options = options;
         };
         this.initialize = function(){
             this.initConfig();
@@ -79,7 +80,7 @@
         };
         this.bindEvents = function(){
             this.$select.change(function(){
-                self.renderActionStatus();
+                _container.renderActionStatus();
             });
             $container.on('click','.pre-one,.pre-all,.next-one,.next-all',function(e){
                 var $el = $(e.currentTarget);
@@ -103,8 +104,8 @@
                 }else{
                     options.current = options.pages;
                 }
-                self.$select.val(options.current);
-                self.renderActionStatus();  
+                _container.$select.val(options.current);
+                _container.renderActionStatus();  
                 if(options.callback){
                     options.callback();
                 }

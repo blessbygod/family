@@ -31,7 +31,15 @@
                     '<ul class="from_list">',
                     '</ul>',
                 '</div>',
-                '<div class="pagination">',
+                '<div class="bottom">',
+                    '<div class="pagination">',
+                    '</div>',
+                    '<div class="toggle_all_page">',
+                        '<%= add_all_page %>',
+                    '</div>',
+                    '<div class="toggle_current_page">',
+                        '<%= add_current_page %>',
+                    '</div>',
                 '</div>',
             '</div>',
             '<div class="action_area">',
@@ -51,7 +59,15 @@
                     '<ul class="to_list">',
                     '</ul>',
                 '</div>',
-                '<div class="pagination">',
+                '<div class="bottom">',
+                    '<div class="pagination">',
+                    '</div>',
+                    '<div class="delete_all_page">',
+                        '<%= delete_all_page %>',
+                    '</div>',
+                    '<div class="delete_current_page">',
+                        '<%= delete_current_page %>',
+                    '</div>',
                 '</div>',
             '</div>'
         ].join('');
@@ -71,7 +87,7 @@
                 from_list: [],
                 to_list: [],
                 itemId : 'id',
-                itemText: 'email',
+                itemText: 'text',
                 status_text_1: '添加',
                 status_text_2: '已添加',
                 status_class_1: 'status_class_1',
@@ -79,6 +95,10 @@
                 page_count : 8,       //每页的显示条数
                 template: template,    //underscore-UI模板
                 template_options:{
+                    delete_current_page: '删除本页',
+                    add_current_page: '添加本页',
+                    delete_all_page: '删除全部',
+                    add_all_page: '添加全部',
                     from_list_title: '待选列表',
                     to_list_title:'已选列表',
                     search_text: '搜索',
@@ -171,6 +191,15 @@
                 })
             });
         };
+        this.dealWithKeyWord = function(isTo){
+            var keyword = isTo ? this.$toSearch.val() : this.$search.val();
+            if(keyword){
+                keyword = keyword.replace(/\s+/,' ');
+            }else{
+                keyword = " ";
+            }
+            return keyword;
+        };
         //处理渲染模板的类型[from,to(search,sort)],是否需要初始化分页
         this._renderList = function(isTo, initPagination, listStatusHash, isHighLight){
             var $list = null,
@@ -189,13 +218,9 @@
             $select = $pagination.$select;
             if($select){
                 current_page = parseInt($select.val(), 10);
+                $pagination.options.current = current_page;
             }
-            var keyword = isTo ? this.$toSearch.val() : this.$search.val();
-            if(keyword){
-                keyword = keyword.replace(/\s+/,' ');
-            }else{
-                keyword = " ";
-            }
+            var keyword = this.dealWithKeyWord(isTo);
             if(keyword !== ' '){
                 list = isTo ? this.toSearchListStatusHash : this.searchListStatusHash; //分页必须保存数据,排序会重置from，to，search的数据。
             }
@@ -431,6 +456,7 @@
             }
             _container._renderList(this.isTo, false, sortListStatusHash, true);
         };
+
         this.initialize();
         return this;
     };

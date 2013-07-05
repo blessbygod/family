@@ -1,9 +1,10 @@
 .from_list_container,.to_list_container,.action_area{
-    width: 300px;
+    width: 350px;
     height: 500px;
     border: 1px solid #aaa;
     float: left;
     margin: 10px 5px 10px 5px;
+    position: relative;
 }
 .action_area{
     width: 80px;
@@ -52,4 +53,9 @@
     text-align: center;
     float: left !important;
     height: 36px !important;
+}
+
+.from_list_container .bottom,.to_list_container .bottom{
+    bottom: 15px;
+    position: absolute;
 }

@@ -9,12 +9,14 @@ define(function(require){
     from_list.push({
         email: 'email_' + i + '@domain_' + i + '.com',
         id:'id_' + i,
+        text: 'id_' + i + ' &lt;' + 'email_' + i + '@domain_' + i + '.com' + '&gt;',
         status: i>9 ? false : true
     });
   }
   for(i=0;i<10;i++){
     to_list.push({
         email: 'email_' + i + '@domain_' + i + '.com',
+        text: 'id_' + i + ' &lt;' + 'email_' + i + '@domain_' + i + '.com' + '&gt;',
         id:'id_' + i
     });
   }
