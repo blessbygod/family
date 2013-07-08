@@ -50,8 +50,8 @@
             this.render();
         };
         this.render = function(){
-            if(options.count){
-                options.pages = Math.ceil(options.count / options.page_count);
+            if(_.isNumber(options.count)){
+                options.pages = Math.ceil(options.count / options.page_count) || 1;
                 var _html = _.template(options.template,{
                     pages: options.pages,
                     current: options.current

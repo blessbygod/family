@@ -257,11 +257,11 @@
                    } 
                 }); 
                 //好浪费性能啊
-                for(var key in _container.listStatusHash){
-                    if(_container.listStatusHash.hasOwnProperty(key)){
-                        if(_container.listStatusHash[key].status === false){
+                var _listStatusHash = keyword === ' ' ? _container.listStatusHash : _container.searchListStatusHash;
+                for(var key in _listStatusHash){
+                    if(_listStatusHash.hasOwnProperty(key)){
+                        if(_listStatusHash[key].status === false){
                             initActionTextAll = true;
-                            console.log(key);
                             break;
                         }
                     }
