@@ -214,11 +214,11 @@
             if(isTo){
                 $list = this.$toList;
                 $pagination = this.$toPagination;
-                list  = this.toListStatusHash;
+                list  = _container.toListStatusHash;
             }else{
                 $list = this.$fromList;
                 $pagination = this.$fromPagination;
-                list  = this.listStatusHash;
+                list  = _container.listStatusHash;
             }
             $select = $pagination.$select;
             if($select){
@@ -364,14 +364,15 @@
             var text = $action.text();
             var add_page = '',added_page = '',list = null,toList = null;
             var current_page = parseInt(this.$fromPagination.$select.val(), 10);
+            var keyword = this.dealWithKeyWord();
+            list = keyword !== ' ' ? _container.searchListStatusHash : _container.listStatusHash;
             if(this.type === 'all'){
                 add_page = options.add_all_page;
                 added_page = options.added_all_page;
-                list = this.listStatusHash;
             }else{
                 add_page = options.add_current_page;
                 added_page = options.added_current_page;
-                list = this.spliceListHashByCountAndPage(this.listStatusHash, current_page);
+                list = this.spliceListHashByCountAndPage(list, current_page);
             }
             if(text === add_page){
                 _.each(list,function(item){
@@ -520,12 +521,7 @@
             var sort = $el.data('sort');
             var current_page = 1;
             var list = {};
-            var keyword = this.isTo ? _container.$toSearch.val() : _container.$search.val();
-            if(keyword){
-                keyword = keyword.replace(/\s+/,' ');
-            }else{
-                keyword = " ";
-            }
+            var keyword = this.dealWithKeyWord();
             if(this.isTo){
                 if(keyword !== ' '){
                     list = _container.toSearchListStatusHash;
@@ -564,13 +560,13 @@
                 sortListStatusHash[key] = list[key];
             });
             if(this.isTo){
-                if(keyword !== ' '){
+                if(keyword === ' '){
                     _container.toListStatusHash = sortListStatusHash;
                 }else{
                     _container.toSearchListStatusHash = sortListStatusHash;
                 }
             }else{
-                if(keyword !== ' '){
+                if(keyword === ' '){
                     _container.listStatusHash = sortListStatusHash;
                 }else{
                     _container.searchListStatusHash = sortListStatusHash;
