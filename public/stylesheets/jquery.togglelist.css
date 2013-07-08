@@ -59,3 +59,9 @@
     bottom: 15px;
     position: absolute;
 }
+.toggle_all_page,.toggle_current_page,.delete_all_page,.delete_current_page{
+    cursor: pointer;
+}
+.gray{
+    color: gray;
+}

@@ -34,10 +34,10 @@
                 '<div class="bottom">',
                     '<div class="pagination">',
                     '</div>',
-                    '<div class="toggle_all_page">',
+                    '<div class="toggle_all_page status_class_1">',
                         '<%= add_all_page %>',
                     '</div>',
-                    '<div class="toggle_current_page">',
+                    '<div class="toggle_current_page status_class_1">',
                         '<%= add_current_page %>',
                     '</div>',
                 '</div>',
@@ -62,10 +62,10 @@
                 '<div class="bottom">',
                     '<div class="pagination">',
                     '</div>',
-                    '<div class="delete_all_page">',
+                    '<div class="delete_all_page status_class_1">',
                         '<%= delete_all_page %>',
                     '</div>',
-                    '<div class="delete_current_page">',
+                    '<div class="delete_current_page status_class_1">',
                         '<%= delete_current_page %>',
                     '</div>',
                 '</div>',
@@ -94,16 +94,16 @@
                 status_class_2: 'status_class_2',
                 page_count : 8,       //每页的显示条数
                 template: template,    //underscore-UI模板
-                template_options:{
-                    delete_current_page: '删除本页',
-                    add_current_page: '添加本页',
-                    delete_all_page: '删除全部',
-                    add_all_page: '添加全部',
-                    from_list_title: '待选列表',
-                    to_list_title:'已选列表',
-                    search_text: '搜索',
-                    search_input_class: 'input-max search-query'
-                },
+                delete_current_page: '删除本页',
+                add_current_page: '添加本页',
+                added_all_page: '已添加全部',
+                added_current_page: '已添加本页',
+                delete_all_page: '删除全部',
+                add_all_page: '添加全部',
+                from_list_title: '待选列表',
+                to_list_title:'已选列表',
+                search_text: '搜索',
+                search_input_class: 'input-max search-query',
                 async: false,    //是否是ajax数据，是则是后端提供分页数据，否，前端自己维护 
                 url:''           //请求后台数据的url
             },options);
@@ -135,7 +135,7 @@
         this.renderTemplate = function(){
             //定义分页状态hash,是否已经添加的
             if(options.template){
-                var _html = _.template(options.template, options.template_options);
+                var _html = _.template(options.template, options);
                 $container.html(_html);
             }
             this.$fromContainer = $('.from_list_container');
@@ -146,6 +146,11 @@
             this.$toList = $('.to_list');
             this.$fromPagination = this.$fromContainer.find('.pagination');
             this.$toPagination = this.$toContainer.find('.pagination');
+            //添加全部，添加本页，删除全部，删除本页
+            this.$toggleAll = this.$fromContainer.find('.toggle_all_page');
+            this.$togglePage = this.$fromContainer.find('.toggle_current_page');
+            this.$deleteAll = this.$toContainer.find('.delete_all_page');
+            this.$deletePage = this.$toContainer.find('.delete_current_page');
         };
         //为分页做准备，可以用ajax代替该内容
         this.spliceListHashByCountAndPage = function(listHash, page){
@@ -229,11 +234,49 @@
                 list = listStatusHash;
             }
             var renderList = this.spliceListHashByCountAndPage(list, current_page);
-            if(renderList.length === 0){
+            while(renderList.length === 0 && current_page > 0){
                 current_page--;
                 renderList = this.spliceListHashByCountAndPage(list, current_page); 
             }
             this.renderList($list, renderList, isTo);
+            //初始化特殊按钮状态【添加全部，添加本页等】
+            if(isTo){
+                if(renderList.length){
+                    this.$deleteAll.removeClass('status_class_2').addClass('status_class_1');
+                    this.$deletePage.removeClass('status_class_2').addClass('status_class_1');
+                }else{
+                    this.$deleteAll.removeClass('status_class_1').addClass('status_class_2');
+                    this.$deletePage.removeClass('status_class_1').addClass('status_class_2');
+                }
+            }else{
+                var initActionTextPage = false,
+                    initActionTextAll = false;
+                _.each(renderList,function(item){
+                   if(item.status === false){
+                      initActionTextPage = true;
+                   } 
+                }); 
+                //好浪费性能啊
+                for(var key in _container.listStatusHash){
+                    if(_container.listStatusHash.hasOwnProperty(key)){
+                        if(_container.listStatusHash[key].status === false){
+                            initActionTextAll = true;
+                            console.log(key);
+                            break;
+                        }
+                    }
+                }
+                if(initActionTextPage){
+                    this.$togglePage.text(options.add_current_page).removeClass('status_class_2').addClass('status_class_1');
+                }else{
+                    this.$togglePage.text(options.added_current_page).removeClass('status_class_1').addClass('status_class_2');
+                }
+                if(initActionTextAll){
+                    this.$toggleAll.text(options.add_all_page).removeClass('status_class_2').addClass('status_class_1');
+                }else{
+                    this.$toggleAll.text(options.added_all_page).removeClass('status_class_1').addClass('status_class_2');
+                }
+            }
             //是否初始化分页组件
             if(initPagination){
                 this.renderPagination($pagination, list, current_page, isTo);
@@ -272,12 +315,23 @@
                 $list: this.$toList,
                 isTo: true
             }));
+            this.$toggleAll.click(_.bind(this.fromAll2To,_.extend({
+                type: 'all'
+            },this)));
+            this.$togglePage.click(_.bind(this.fromAll2To, this));
+            this.$deleteAll.click(_.bind(this.toAll2From,_.extend({
+                type: 'all'
+            },this)));
+            this.$deletePage.click(_.bind(this.toAll2From, this));
         };
         this.selectChangeFunc = function(e){
             _container._renderList(this.isTo, false, null, true);
         };
         //同步item添加状态
         this.syncFromItemStatus = function(item, status){
+            if(!item){
+                return;
+            }
             if(status !== true){
                 item.status = false;
                 item.statusClass = options.status_class_1;
@@ -288,27 +342,94 @@
                 item.statusText = options.status_text_2;
             }
         };
-        //事件集合
-        this.from2To = function(e){
-            var $action = $(e.currentTarget);
-            var $li = $action.parent();
-            var id  = $li.data('id');
+        //单个from到to的动作
+        this.fromItem2To = function(id,$item){
             var item = this.listStatusHash[id];
             var status = item.status;
             //true为已添加，false为未添加
             if(status === true){
                 this.syncFromItemStatus(item);
-                $action.text(options.status_text_1);
-                $action.removeClass('status_class_2').addClass('status_class_1');
+                $item.text(options.status_text_1);
+                $item.removeClass('status_class_2').addClass('status_class_1');
                 delete this.toListStatusHash[id]; 
             }else{
                 this.syncFromItemStatus(item,true);
-                $action.text(options.status_text_2);
-                $action.removeClass('status_class_1').addClass('status_class_2');
+                $item.text(options.status_text_2);
+                $item.removeClass('status_class_1').addClass('status_class_2');
                 this.toListStatusHash[id] = item;
             }
+        };
+        this.fromAll2To = function(e){
+            var $action = $(e.currentTarget);
+            var text = $action.text();
+            var add_page = '',added_page = '',list = null,toList = null;
+            var current_page = parseInt(this.$fromPagination.$select.val(), 10);
+            if(this.type === 'all'){
+                add_page = options.add_all_page;
+                added_page = options.added_all_page;
+                list = this.listStatusHash;
+            }else{
+                add_page = options.add_current_page;
+                added_page = options.added_current_page;
+                list = this.spliceListHashByCountAndPage(this.listStatusHash, current_page);
+            }
+            if(text === add_page){
+                _.each(list,function(item){
+                    _container.syncFromItemStatus(item, true);
+                    _container.toListStatusHash[item[options.itemId]] = item;
+                });
+                $action.text(added_page);
+                $action.removeClass('status_class_1').addClass('status_class_2');
+            }else{
+                _.each(list,function(item, key){
+                    _container.syncFromItemStatus(item);
+                    delete _container.toListStatusHash[item[options.itemId]]; 
+                });
+                $action.text(add_page);
+                $action.removeClass('status_class_2').addClass('status_class_1');
+            }
+            _container._renderList(true, true, null, true);
+            _container._renderList(false, false, null, true);
+        };
+        //事件集合
+        this.from2To = function(e){
+            var $action = $(e.currentTarget);
+            var $li = $action.parent();
+            var id  = $li.data('id');
+            this.fromItem2To(id, $action);
             //渲染已选列表
             _container._renderList(true, true, null, true);
+        };
+        this.toAll2From = function(e){
+            var $action = $(e.currentTarget);
+            if($action.hasClass('status_class_2')){
+                return;
+            }
+            var current_page = parseInt(this.$toPagination.$select.val(), 10);
+            if(this.type === 'all'){
+                _container.toListStatusHash = {};
+                _container.toSearchListStatusHash = {};
+                _.each(_container.listStatusHash,function(item, key){
+                    _container.syncFromItemStatus(item);
+                });
+                _.each(_container.searchStatusHash,function(item, key){
+                    _container.syncFromItemStatus(item);
+                });
+            }else{
+                this.$toList.find('li').each(function(){
+                    var $li = $(this);
+                    var id = $li.data('id');
+                    var item = _container.listStatusHash[id];
+                    var sItem = _container.searchListStatusHash[id];
+                    delete _container.toListStatusHash[id]; 
+                    delete _container.toSearchListStatusHash[id];
+                    //置待选列表状态为默认值
+                    _container.syncFromItemStatus(item);
+                    _container.syncFromItemStatus(sItem);
+                });
+            }
+            _container._renderList(true, true, null, true);
+            _container._renderList(false, false, null, true);
         };
         //删除已选到待选
         this.to2From = function(e){
@@ -316,13 +437,14 @@
             var $li = $action.parent();
             var id  = $li.data('id');
             var item = this.listStatusHash[id];
+            var sItem = this.searchListStatusHash[id];
             delete this.toListStatusHash[id]; 
             delete this.toSearchListStatusHash[id];
-            $li.remove();
-            //渲染待选已选列表
-            _container._renderList(true, true, null, true);
             //置待选列表状态为默认值
             this.syncFromItemStatus(item);
+            this.syncFromItemStatus(sItem);
+            //渲染待选已选列表
+            _container._renderList(true, true, null, true);
             _container._renderList(false, false, null, true);
         };
         //高亮搜索匹配的字体
