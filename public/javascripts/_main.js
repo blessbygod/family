@@ -9,8 +9,7 @@ define(function(require){
     from_list.push({
         email: 'email_' + i + '@domain_' + i + '.com',
         id:'id_' + i,
-        text: 'id_' + i + ' &lt;' + 'email_' + i + '@domain_' + i + '.com' + '&gt;',
-        status: i>9 ? false : true
+        text: 'id_' + i + ' &lt;' + 'email_' + i + '@domain_' + i + '.com' + '&gt;'
     });
   }
   for(i=0;i<10;i++){

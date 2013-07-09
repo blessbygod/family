@@ -115,14 +115,20 @@
             this.searchListStatusHash = {};
             this.toSearchListStatusHash = {};
             _.each(options.from_list,function(list){
-                list.statusText =  list.status === true ? options.status_text_2 : options.status_text_1;
-                list.statusClass = list.status === true ? options.status_class_2 : options.status_class_1;
                 var key = list[options.itemId];
                 _container.listStatusHash[key] = list;
             });
             _.each(options.to_list,function(list){
                 var key = list[options.itemId];
                 _container.toListStatusHash[key] = list;
+            });
+            //更新待选列表的status状态，根据to_list
+            _.each(_container.listStatusHash,function(list, key){
+                if(_container.toListStatusHash.hasOwnProperty(key)){
+                    list.status = true;
+                }
+                list.statusText =  list.status === true ? options.status_text_2 : options.status_text_1;
+                list.statusClass = list.status === true ? options.status_class_2 : options.status_class_1;
             });
         };
         //渲染容器
@@ -252,7 +258,7 @@
                 var initActionTextPage = false,
                     initActionTextAll = false;
                 _.each(renderList,function(item){
-                   if(item.status === false){
+                   if(item.status !== true){
                       initActionTextPage = true;
                    } 
                 }); 
@@ -260,7 +266,7 @@
                 var _listStatusHash = keyword === ' ' ? _container.listStatusHash : _container.searchListStatusHash;
                 for(var key in _listStatusHash){
                     if(_listStatusHash.hasOwnProperty(key)){
-                        if(_listStatusHash[key].status === false){
+                        if(_listStatusHash[key].status !== true){
                             initActionTextAll = true;
                             break;
                         }
