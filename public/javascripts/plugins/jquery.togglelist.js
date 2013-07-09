@@ -223,7 +223,6 @@
             $select = $pagination.$select;
             if($select){
                 current_page = parseInt($select.val(), 10);
-                $pagination.options.current = current_page;
             }
             var keyword = this.dealWithKeyWord(isTo);
             if(keyword !== ' '){
@@ -278,6 +277,9 @@
                 }
             }
             //是否初始化分页组件
+            if($select){
+                $pagination.options.current = current_page;
+            }
             if(initPagination){
                 this.renderPagination($pagination, list, current_page, isTo);
             }
@@ -400,6 +402,7 @@
             this.fromItem2To(id, $action);
             //渲染已选列表
             _container._renderList(true, true, null, true);
+            _container._renderList(false, false, null, true);
         };
         this.toAll2From = function(e){
             var $action = $(e.currentTarget);

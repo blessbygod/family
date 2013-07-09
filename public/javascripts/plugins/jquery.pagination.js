@@ -82,6 +82,7 @@
             this.$select.change(function(){
                 _container.renderActionStatus();
             });
+            $container.off('click');
             $container.on('click','.pre-one,.pre-all,.next-one,.next-all',function(e){
                 var $el = $(e.currentTarget);
                 if($el.hasClass('disabled')){
