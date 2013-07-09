@@ -199,6 +199,7 @@
         this.dealWithKeyWord = function(isTo){
             var keyword = isTo ? this.$toSearch.val() : this.$search.val();
             if(keyword){
+                keyword = $.trim(keyword);
                 keyword = keyword.replace(/\s+/,' ');
             }else{
                 keyword = " ";
@@ -457,7 +458,7 @@
             if(!keyword){
                 return retVal;
             }
-            //keyword = keyword.replace(/\s+/,' ');
+            
             var keywordArr = keyword.split(' ');
             var regExps = '';
             _.each( keywordArr,function( key ){
