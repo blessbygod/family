@@ -1,6 +1,6 @@
 .from_list_container,.to_list_container,.action_area{
     width: 350px;
-    height: 500px;
+    height: 600px;
     border: 1px solid #aaa;
     float: left;
     margin: 10px 5px 10px 5px;
@@ -35,8 +35,8 @@
 }
 .from_list li,.to_list li{
     list-style: none;
-    height: 40px;
-    line-height: 40px;
+    height: 32px;
+    line-height: 32px;
 }
 .status_action{
     cursor: pointer;

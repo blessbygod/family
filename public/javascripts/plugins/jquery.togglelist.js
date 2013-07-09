@@ -92,7 +92,7 @@
                 status_text_2: '已添加',
                 status_class_1: 'status_class_1',
                 status_class_2: 'status_class_2',
-                page_count : 8,       //每页的显示条数
+                page_count : 12,       //每页的显示条数
                 template: template,    //underscore-UI模板
                 delete_current_page: '删除本页',
                 add_current_page: '添加本页',
@@ -524,7 +524,7 @@
             var sort = $el.data('sort');
             var current_page = 1;
             var list = {};
-            var keyword = this.dealWithKeyWord();
+            var keyword = _container.dealWithKeyWord();
             if(this.isTo){
                 if(keyword !== ' '){
                     list = _container.toSearchListStatusHash;
