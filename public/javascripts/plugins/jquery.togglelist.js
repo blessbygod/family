@@ -104,8 +104,19 @@
                 to_list_title:'已选列表',
                 search_text: '搜索',
                 search_input_class: 'input-max search-query',
-                async: false,    //是否是ajax数据，是则是后端提供分页数据，否，前端自己维护 
-                url:''           //请求后台数据的url
+                //分页样式配置
+                pagination:{
+                    paginationULClass: 'page_nav',
+                    preAllClass: 'pre-all',
+                    preOneClass: 'pre-one',
+                    nextOneClass: 'next-one',
+                    nextAllClass: 'next-all',
+                    isSameDisabled: true,
+                    disabledClassDashline: '_',
+                    disabledClass: 'disabled',
+                    paginationTextArr: ['<<','<','>','>>'],
+                    paginationSelectContainerClass: 'page_numa'
+                }
             },options);
         };
         //初始化列表item状态是否被添加,默认未添加状态
@@ -192,15 +203,15 @@
         //初始化分页
         this.renderPagination = function($pagination, list,current_page,isTo){
             var count = _.keys(list).length;
-            $pagination.pagination({
+            var paginationOptions = _.extend(options.pagination,{
                 count: count,
                 current: current_page || 1,
-                page_count : options.page_count,
                 callback: _.bind(this.selectChangeFunc,{
                     list: list,
                     isTo: isTo 
                 })
             });
+            $pagination.pagination(paginationOptions);
         };
         this.dealWithKeyWord = function(isTo){
             var keyword = isTo ? this.$toSearch.val() : this.$search.val();

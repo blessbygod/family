@@ -61,6 +61,9 @@
 }
 .toggle_all_page,.toggle_current_page,.delete_all_page,.delete_current_page{
     cursor: pointer;
+    margin-top: 6px;
+    margin-left: 6px;
+    float: left;
 }
 .gray{
     color: gray;
