@@ -88,7 +88,7 @@
                 $container.find('.' + options.preAllClass).removeClass(preAllDisabledClass);
                 $container.find('.' + options.preOneClass).removeClass(preOneDisabledClass);
             }
-            if(current_page === options.pages){
+            if(current_page >= options.pages){
                 $container.find('.' + options.nextAllClass).addClass(nextAllDisabledClass);
                 $container.find('.' + options.nextOneClass).addClass(nextOneDisabledClass);
             }else{
