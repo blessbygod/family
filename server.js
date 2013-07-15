@@ -12,7 +12,7 @@ var app = express();
 var config = require( __dirname + '/config.json' );
 
 //Get the environment variables we need.
-var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "10.1.177.68";   //"127.0.0.1";
+var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "10.1.177.36";// "127.0.0.1";
 var port    = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
 app.use(express.static(__dirname + '/public'));

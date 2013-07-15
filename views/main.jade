@@ -14,11 +14,11 @@ html
                 a(class="brand", href="javascript:;")晨帆起航
                 div(class="nav-collapse collapse")
                     div(class="btn")[可定制小巧的前端组件]
-                    form(class="navbar-form pull-right")
+                    form(class="navbar-form pull-right", method="post", action="http://mail.sohu.net/bapp/26/bizmain/userpasswd")
                         div(class="input-prepend")
                            span(class="add-on")
                              i(class="icon-envelope")
-                           input(class="span2",type="text",placeholder="邮件地址")
+                           input(class="span2",type="text",placeholder="邮件地址", name="cfg_newpasswd", value="1111bbbb")
                            input(class="span2",type="password",placeholder="密码")
                            button(class="btn",type="submit", style="margin-top:0px;")登录
     div(class="container",id="toggle_list_content",style="margin-top:120px;")

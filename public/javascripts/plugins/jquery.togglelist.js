@@ -171,6 +171,7 @@
         };
         //为分页做准备，可以用ajax代替该内容
         this.spliceListHashByCountAndPage = function(listHash, page){
+            console.log(this.spliceListHashByCountAndPage.caller);
             page = page || 1;
             var renderList = []; 
             if(_.isObject(listHash) === true){
@@ -206,6 +207,7 @@
             var paginationOptions = _.extend(options.pagination,{
                 count: count,
                 current: current_page || 1,
+                page_count: options.page_count,
                 callback: _.bind(this.selectChangeFunc,{
                     list: list,
                     isTo: isTo 

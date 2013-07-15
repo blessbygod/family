@@ -97,7 +97,9 @@
             }
         };
         this.bindEvents = function(){
-            this.$select.change(function(){
+            $container.off('click');
+            this.$select.off('change');
+            this.$select.on('change',function(){
                 _container.renderActionStatus();
             });
             var clickClasses = [
@@ -106,7 +108,6 @@
                 '.' + options.nextOneClass,
                 '.' + options.nextAllClass
             ].join();
-            $container.off('click');
             $container.on('click', clickClasses, function(e){
                 var $el = $(e.currentTarget);
                 if($el.attr('class').indexOf(options.disabledClass) > -1){
