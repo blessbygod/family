@@ -5,7 +5,7 @@ define(function(require){
   require('jquery.togglelist');  
   var from_list = [];
   var to_list = [];
-  for(var i=0;i<15000;i++){
+  for(var i=0;i<150000;i++){
     from_list.push({
         email: 'email_' + i + '@domain_' + i + '.com',
         id:'id_' + i,
