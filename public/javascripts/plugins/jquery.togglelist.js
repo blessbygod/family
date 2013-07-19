@@ -186,7 +186,7 @@
             var _listTemplate = [
                 '<% _.each(list,function(item){ %>',
                     '<li data-id="<%= item[itemId] %>">',
-                        '<span><%= item[itemText] %></span>',
+                        '<span title="<%= item[itemText] %>"> <%= context.highLightSearchKeyWord(item[itemText], context.dealWithKeyWord(isTo)) %></span>',
                         '<span class="status_action ', isTo ? 'icon-trash" style="margin-top:12px" >' : '<%= item.statusClass %>" >',
                             isTo ? '' : '<%= item.statusText %>',
                         '</span>',
@@ -194,6 +194,8 @@
                 '<% }); %>'
             ].join('');
             var _html = _.template(_listTemplate,{
+                isTo: isTo,
+                context: this,
                 list: list,
                 itemText: options.itemText,
                 itemId: options.itemId
@@ -302,13 +304,13 @@
             if(initPagination){
                 this.renderPagination($pagination, list, current_page, isTo);
             }
-            if(isHighLight){
+           /* if(isHighLight){
                 if(keyword !== ' '){
                     var _html = $list.html();
                     _html = this.highLightSearchKeyWord(_html, keyword);
                     $list.html(_html);
                 }
-            }
+            }*/
         };
         //绑定事件
         this.bindEvents = function(){
@@ -473,10 +475,10 @@
         //高亮搜索匹配的字体
         this.highLightSearchKeyWord = function(source, keyword){
             var retVal = "";
-            if(!keyword){
+            if(keyword === ' '){
+                retVal = source;
                 return retVal;
             }
-            
             var keywordArr = keyword.split(' ');
             var regExps = '';
             _.each( keywordArr,function( key ){
