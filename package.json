@@ -1,7 +1,6 @@
 {
-  "name": "pusher-node-openshift-quickstart",
-  "version": "1.0.0",
-  "description": "Pusher on OpenShift using Node.js QuickStart",
+  "name":"af-node-base",
+  "version":"0.0.1",
   "keywords": [
     "Node.js",
     "openshift",
@@ -37,5 +36,5 @@
   "bundleDependencies": [],
 
   "private": true,
-  "main": "server.js"
+  "main": "app.js"
 }
