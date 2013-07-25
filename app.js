@@ -1,7 +1,6 @@
 #!/bin/env node
 
-var Pusher = require( 'pusher' ),
-    express = require('express'),
+var    express = require('express'),
     main = require('./routes/main'),
     three = require('./routes/three'),
     http = require('http'),
