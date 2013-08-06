@@ -5,7 +5,11 @@ html
     <!-- link(rel='stylesheet', href='/stylesheets/main.css',type="text/css") -->
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css',type="text/css")
     link(rel='stylesheet', href='/stylesheets/jquery.togglelist.css',type="text/css")
-    script(src="/javascripts/sea.js",data-config="/javascripts/_config",data-main="/javascripts/_main")
+    script(src="/javascripts/sea.js",data-config="/javascripts/_config")
+    script
+        seajs.use('/javascripts/thirdparty/jquery-1.9.1.min.js')
+        seajs.use('/javascripts/thirdparty/underscore-1.5.1.js')
+        seajs.use('/javascripts/main.js')
  body
     block content
     header(class="navbar navbar-fixed-top")

@@ -4,8 +4,7 @@
  * 1. 灵活定制分页，UI,CSS,ACTION 分离
  * 2. 目前支持给定容器填充
  * */
-
-(function($,_,undefined){
+define(function(require){
     $.fn.pagination = function(options){
         var $container = $(this);
         var _container = this;
@@ -140,4 +139,4 @@
         this.initialize();
         return this;
     };
-})(window.jQuery,window._);
+});

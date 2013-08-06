@@ -1,7 +1,4 @@
 define(function(require){
-  var Backbone = require('backbone'),
-      bootstrap = require('bootstrap');
-      //toggle_list query
   require('jquery.togglelist');  
   var from_list = [];
   var to_list = [];

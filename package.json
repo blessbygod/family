@@ -1,5 +1,6 @@
 {
   "name":"family",
+  "injsname": "main", 
   "version":"0.0.1",
   "keywords": [
     "Node.js"
@@ -13,9 +14,16 @@
   "dependencies": {
     "express": "3.x",
     "ejs": "~0.7.1",
-    "underscore":"*",
+    "underscore":"~1.4.3",
     "node-uuid":"*",
     "jade":"*"
+  },
+  "spm": {
+    "alias": {
+        "backbone": "thirdparty/backbone",
+        "jquery.pagination": "plugins/jquery.pagination",
+        "jquery.togglelist": "plugins/jquery.togglelist"
+    }
   },
   "devDependencies": {
       "grunt": "~0.4.1",
@@ -23,6 +31,7 @@
       "grunt-cmd-concat": "*",
       "grunt-contrib-jshint": "~0.6.0",
       "grunt-contrib-nodeunit": "~0.2.0",
+      "grunt-contrib-clean": "*",
       "grunt-contrib-uglify": "~0.2.2"
   },
   "bundleDependencies": [],

@@ -10,7 +10,8 @@
  * css 部分依赖bootstrap
  * */
 
-(function($,_,undefined){
+define(function(require){
+    require('jquery.pagination');
     $.fn.togglelist = function(options){
         //本插件容器组件
         var $container = $(this);
@@ -602,4 +603,4 @@
         this.initialize();
         return this;
     };
-}(window.jQuery,window._));
+});
