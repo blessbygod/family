@@ -10,7 +10,8 @@
  * css 部分依赖bootstrap
  * */
 
-(function($,_,undefined){
+define(function(require){
+    require('jquery.pagination');
     $.fn.togglelist = function(options){
         //本插件容器组件
         var $container = $(this);
@@ -21,10 +22,11 @@
             '<div class="from_list_container">',
                 '<div class="title">',
                     '<span><%= from_list_title %></span>',
+                    '<i class="sort-query icon-download pull-right" data-sort="asc"></i>',
                 '</div>',
                 '<div class="search">',
                     '<input class="<%= search_input_class %>" placeholder="<%= search_text %>" />',
-                    '<i class="sort-query icon-download pull-right" data-sort="asc"></i>',
+              //      '<button class="btn" type="submit"><%= search_text %></button>',
                 '</div>',
                 '<div class="list_container">',
                     '<ul class="from_list">',
@@ -48,10 +50,11 @@
             '<div class="to_list_container">',
                 '<div class="title">',
                     '<span><%= to_list_title %></span>',
+                    '<i class="sort-query icon-download pull-right" data-sort="asc"></i>',
                 '</div>',
                 '<div class="search">',
                     '<input class="<%= search_input_class %>" placeholder="<%= search_text %>" />',
-                    '<i class="sort-query icon-download pull-right" data-sort="asc"></i>',
+            //        '<button class="btn" type="submit"><%= search_text %></button>',
                 '</div>',
                 '<div class="list_container">',
                     '<ul class="to_list">',
@@ -81,7 +84,7 @@
         };
         //配置初始化
         this.initConfig = function(){
-            this.options = options = _.extend({
+            options = _.extend({
                 from_list: [],
                 to_list: [],
                 itemId : 'id',
@@ -101,7 +104,7 @@
                 from_list_title: '待选列表',
                 to_list_title:'已选列表',
                 search_text: '搜索',
-                search_input_class: 'search-query',
+                search_input_class: 'input-max search-query',
                 //分页样式配置
                 pagination:{
                     paginationULClass: 'page_nav',
@@ -179,14 +182,12 @@
             return renderList;
         };
         //填充列表
-        this.renderList = function($listUL, list, isTo){
-            $listUL.children().remove();
+        this.renderList = function($listContainer,list,isTo){
+            $listContainer.children().remove();
             var _listTemplate = [
                 '<% _.each(list,function(item){ %>',
                     '<li data-id="<%= item[itemId] %>">',
-                    isTo? '<span title="<%= item[itemText] %>" class="word_break8"><%= context.highLightSearchKeyWord(item[itemText], context.dealWithKeyWord(isTo)) %></span>'
-                       :
-                       '<span title="<%= item[itemText] %>" class="word_break7"><%= context.highLightSearchKeyWord(item[itemText], context.dealWithKeyWord(isTo)) %></span>',
+                        '<span title="<%= item[itemText] %>"> <%= context.highLightSearchKeyWord(item[itemText], context.dealWithKeyWord(isTo)) %></span>',
                         '<span class="status_action ', isTo ? 'icon-trash" style="margin-top:12px" >' : '<%= item.statusClass %>" >',
                             isTo ? '' : '<%= item.statusText %>',
                         '</span>',
@@ -200,10 +201,7 @@
                 itemText: options.itemText,
                 itemId: options.itemId
             }); 
-            $listUL.html(_html);
-            if(options.callback){
-                options.callback(_container);
-            }
+            $listContainer.html(_html);
         };
         //初始化分页
         this.renderPagination = function($pagination, list,current_page,isTo){
@@ -228,20 +226,6 @@
                 keyword = " ";
             }
             return keyword;
-        };
-        //处理外域账号的问题
-        this._specialRenderList = function($listContainer, list){
-            var $list = $listContainer.find('.out_list');
-            var $pagination = $listContainer.$pagination;
-            var $select = $pagination.$select;
-            var cpage = $select ? parseInt($select.val(), 10) : 1;
-            var renderList = _container.spliceListHashByCountAndPage(list, cpage);
-            while(renderList.length === 0 && cpage > 0){
-                cpage--;
-                renderList = _container.spliceListHashByCountAndPage(list, cpage); 
-            }
-            $pagination.options.current = cpage;
-            _container.renderList($list, renderList, true );
         };
         //处理渲染模板的类型[from,to(search,sort)],是否需要初始化分页
         this._renderList = function(isTo, initPagination, listStatusHash, isHighLight){
@@ -321,6 +305,13 @@
             if(initPagination){
                 this.renderPagination($pagination, list, current_page, isTo);
             }
+           /* if(isHighLight){
+                if(keyword !== ' '){
+                    var _html = $list.html();
+                    _html = this.highLightSearchKeyWord(_html, keyword);
+                    $list.html(_html);
+                }
+            }*/
         };
         //绑定事件
         this.bindEvents = function(){
@@ -612,4 +603,4 @@
         this.initialize();
         return this;
     };
-}(window.jQuery,window._));
+});
