@@ -1,10 +1,17 @@
-# toggle list
-# move unselected list to selected list.
-# sort,search,pagination
+Family
+======
+ 包含作者个人的一些组件和项目，直观的可以看到待选-已选列表
+ 经过设置同样可以使用德州扑克online的一些可视化界面
 
-# 模板可以自己定义
+toggleList
+----------
+待选-已选列表
+    1、
 
 
-# 添加，到已选择列表
-# 删除，到待选列表
-# 已添加按钮点击，添加到已选择列表的item回到待选列表
+texaspoker online
+-----------------
+  1、目前 views/main.jade.backup 修改为main.jade，可以直接查看online目前的开发状况
+  开发状况：
+    1. 从七张牌中取五张牌中最大的组合，即皇家同花顺>同花顺>四条>葫芦>同花>顺子>两对>高对>高牌  的选择
+    2. 有highlight图可以查看1000次各种成牌比例
