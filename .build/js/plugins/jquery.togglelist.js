@@ -17,11 +17,9 @@ define("http://127.0.0.1:3000/javascripts/plugins/jquery.togglelist", [ "plugins
         var _container = this;
         this.timer = null;
         //默认参数
-        var template = [ '<div class="from_list_container">', '<div class="title">', "<span><%= from_list_title %></span>", '<i class="sort-query icon-download pull-right" data-sort="asc"></i>', "</div>", '<div class="search">', '<input class="<%= search_input_class %>" placeholder="<%= search_text %>" />', //      '<button class="btn" type="submit"><%= search_text %></button>',
-        "</div>", '<div class="list_container">', '<ul class="from_list">', "</ul>", "</div>", '<div class="bottom">', '<div class="pagination">', "</div>", '<div class="toggle_all_page status_class_1">', "<%= add_all_page %>", "</div>", '<div class="toggle_current_page status_class_1">', "<%= add_current_page %>", "</div>", "</div>", "</div>", '<div class="action_area">', //'<i class="icon-chevron-left"></i>',
+        var template = [ '<div class="from_list_container">', '<div class="title">', "<span><%= from_list_title %></span>", "</div>", '<div class="search">', '<input class="<%= search_input_class %>" placeholder="<%= search_text %>" />', '<i class="sort-query icon-download pull-right" data-sort="asc"></i>', "</div>", '<div class="list_container">', '<ul class="from_list">', "</ul>", "</div>", '<div class="bottom">', '<div class="pagination">', "</div>", '<div class="toggle_all_page status_class_1">', "<%= add_all_page %>", "</div>", '<div class="toggle_current_page status_class_1">', "<%= add_current_page %>", "</div>", "</div>", "</div>", '<div class="action_area">', //'<i class="icon-chevron-left"></i>',
         //'<i class="icon-chevron-right"></i>',
-        "</div>", '<div class="to_list_container">', '<div class="title">', "<span><%= to_list_title %></span>", '<i class="sort-query icon-download pull-right" data-sort="asc"></i>', "</div>", '<div class="search">', '<input class="<%= search_input_class %>" placeholder="<%= search_text %>" />', //        '<button class="btn" type="submit"><%= search_text %></button>',
-        "</div>", '<div class="list_container">', '<ul class="to_list">', "</ul>", "</div>", '<div class="bottom">', '<div class="pagination">', "</div>", '<div class="delete_all_page status_class_1">', "<%= delete_all_page %>", "</div>", '<div class="delete_current_page status_class_1">', "<%= delete_current_page %>", "</div>", "</div>", "</div>" ].join("");
+        "</div>", '<div class="to_list_container">', '<div class="title">', "<span><%= to_list_title %></span>", "</div>", '<div class="search">', '<input class="<%= search_input_class %>" placeholder="<%= search_text %>" />', '<i class="sort-query icon-download pull-right" data-sort="asc"></i>', "</div>", '<div class="list_container">', '<ul class="to_list">', "</ul>", "</div>", '<div class="bottom">', '<div class="pagination">', "</div>", '<div class="delete_all_page status_class_1">', "<%= delete_all_page %>", "</div>", '<div class="delete_current_page status_class_1">', "<%= delete_current_page %>", "</div>", "</div>", "</div>" ].join("");
         //1.当前列表的分页
         var from_current_page = 1, to_current_page = 1;
         //初始化插件
@@ -33,7 +31,7 @@ define("http://127.0.0.1:3000/javascripts/plugins/jquery.togglelist", [ "plugins
         };
         //配置初始化
         this.initConfig = function() {
-            options = _.extend({
+            this.options = options = _.extend({
                 from_list: [],
                 to_list: [],
                 itemId: "id",
@@ -55,7 +53,7 @@ define("http://127.0.0.1:3000/javascripts/plugins/jquery.togglelist", [ "plugins
                 from_list_title: "待选列表",
                 to_list_title: "已选列表",
                 search_text: "搜索",
-                search_input_class: "input-max search-query",
+                search_input_class: "search-query",
                 //分页样式配置
                 pagination: {
                     paginationULClass: "page_nav",
@@ -134,9 +132,9 @@ define("http://127.0.0.1:3000/javascripts/plugins/jquery.togglelist", [ "plugins
             return renderList;
         };
         //填充列表
-        this.renderList = function($listContainer, list, isTo) {
-            $listContainer.children().remove();
-            var _listTemplate = [ "<% _.each(list,function(item){ %>", '<li data-id="<%= item[itemId] %>">', '<span title="<%= item[itemText] %>"> <%= context.highLightSearchKeyWord(item[itemText], context.dealWithKeyWord(isTo)) %></span>', '<span class="status_action ', isTo ? 'icon-trash" style="margin-top:12px" >' : '<%= item.statusClass %>" >', isTo ? "" : "<%= item.statusText %>", "</span>", "</li>", "<% }); %>" ].join("");
+        this.renderList = function($listUL, list, isTo) {
+            $listUL.children().remove();
+            var _listTemplate = [ "<% _.each(list,function(item){ %>", '<li data-id="<%= item[itemId] %>">', isTo ? '<span title="<%= item[itemText] %>" class="word_break8"><%= context.highLightSearchKeyWord(item[itemText], context.dealWithKeyWord(isTo)) %></span>' : '<span title="<%= item[itemText] %>" class="word_break7"><%= context.highLightSearchKeyWord(item[itemText], context.dealWithKeyWord(isTo)) %></span>', '<span class="status_action ', isTo ? 'icon-trash" style="margin-top:12px" >' : '<%= item.statusClass %>" >', isTo ? "" : "<%= item.statusText %>", "</span>", "</li>", "<% }); %>" ].join("");
             var _html = _.template(_listTemplate, {
                 isTo: isTo,
                 context: this,
@@ -144,7 +142,10 @@ define("http://127.0.0.1:3000/javascripts/plugins/jquery.togglelist", [ "plugins
                 itemText: options.itemText,
                 itemId: options.itemId
             });
-            $listContainer.html(_html);
+            $listUL.html(_html);
+            if (options.callback) {
+                options.callback(_container);
+            }
         };
         //初始化分页
         this.renderPagination = function($pagination, list, current_page, isTo) {
@@ -169,6 +170,20 @@ define("http://127.0.0.1:3000/javascripts/plugins/jquery.togglelist", [ "plugins
                 keyword = " ";
             }
             return keyword;
+        };
+        //处理外域账号的问题
+        this._specialRenderList = function($listContainer, list) {
+            var $list = $listContainer.find(".out_list");
+            var $pagination = $listContainer.$pagination;
+            var $select = $pagination.$select;
+            var cpage = $select ? parseInt($select.val(), 10) : 1;
+            var renderList = _container.spliceListHashByCountAndPage(list, cpage);
+            while (renderList.length === 0 && cpage > 0) {
+                cpage--;
+                renderList = _container.spliceListHashByCountAndPage(list, cpage);
+            }
+            $pagination.options.current = cpage;
+            _container.renderList($list, renderList, true);
         };
         //处理渲染模板的类型[from,to(search,sort)],是否需要初始化分页
         this._renderList = function(isTo, initPagination, listStatusHash, isHighLight) {

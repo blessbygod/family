@@ -62,6 +62,20 @@ module.exports = function(grunt){
                 ]
             }
         },
+        'string-replace': {
+            main: {
+                files: {
+                    'public/javascripts/main.js': 'public/javascripts/main.js'
+                },
+                options: {
+                    paths:['.'],
+                    replacements: [{
+                        pattern: 'javascripts/main/main',
+                        replacement:'javascripts/main'
+                    }]
+                }
+            }
+        },
         uglify:{
             dist:{
                 src: 'public/javascripts/<%= pkg.injsname%>.js',
@@ -72,8 +86,9 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-cmd-transport');
     grunt.loadNpmTasks('grunt-cmd-concat');
+    grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    grunt.registerTask('build',['clean', 'transport', 'concat', 'uglify']);
+    grunt.registerTask('build',['clean', 'transport', 'concat', 'string-replace', 'uglify']);
     grunt.registerTask('default',['build']);
 };

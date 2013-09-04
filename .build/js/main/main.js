@@ -2,7 +2,7 @@ define("http://127.0.0.1:3000/javascripts/main/main", [ "plugins/jquery.toggleli
     require("plugins/jquery.togglelist");
     var from_list = [];
     var to_list = [];
-    for (var i = 0; i < 15e4; i++) {
+    for (var i = 0; i < 800; i++) {
         from_list.push({
             email: "email_" + i + "@domain_" + i + ".com",
             id: "id_" + i,
