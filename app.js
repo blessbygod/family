@@ -11,8 +11,8 @@ var app = express();
 var config = require( __dirname + '/config.json' );
 
 //Get the environment variables we need.
-var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-var port    = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+var ipaddr  = '0.0.0.0';
+var port    = 3000;
 
 app.use(express.static(__dirname + '/public'));
 app.set( 'views', __dirname + '/views' );
