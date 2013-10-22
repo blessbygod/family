@@ -4,7 +4,7 @@
  * 1. 灵活定制分页，UI,CSS,ACTION 分离
  * 2. 目前支持给定容器填充
  * */
-define("http://127.0.0.1:3000/javascripts/plugins/jquery.pagination", [], function(require) {
+define("http://www.lichenfan.com:3000/javascripts/plugins/jquery.pagination", [], function(require) {
     $.fn.pagination = function(options) {
         var $container = $(this);
         var _container = this;

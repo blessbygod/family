@@ -1,4 +1,4 @@
-define("http://127.0.0.1:3000/javascripts/main/main", [ "plugins/jquery.togglelist" ], function(require) {
+define("http://www.lichenfan.com:3000/javascripts/main/main", [ "plugins/jquery.togglelist" ], function(require) {
     require("plugins/jquery.togglelist");
     var from_list = [];
     var to_list = [];
