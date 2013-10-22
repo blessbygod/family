@@ -1,11 +1,10 @@
-"use strict";
 var configloader = require('./configfile');
 var path         = require('path');
 var utils        = require('./utils');
 
 var config = exports;
 
-var config_path = process.env.HARAKA ? path.join(process.env.HARAKA, 'config') : path.join(__dirname, './config');
+var config_path = path.join(__dirname, './config');
 
 config.get = function(name, type, cb) {
     if (type === 'nolog') {

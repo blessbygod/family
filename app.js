@@ -1,6 +1,6 @@
 #!/bin/env node
 
-var    express = require('express'),
+var express = require('express'),
     main = require('./routes/main'),
     three = require('./routes/three'),
     http = require('http'),
@@ -19,7 +19,8 @@ app.set( 'views', __dirname + '/views' );
 app.set( 'view engine', 'jade' );
 
 //默认获取main.jade
-app.get('/', main.info);
+app.get('/', main.index);
+app.get('/poker', main.info);
 //ajax获取json
 app.get('/config', main.config);
 //获取自定义页面,three.info 里面有render的页面

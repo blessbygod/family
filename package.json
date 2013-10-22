@@ -15,7 +15,8 @@
     "ejs": "~0.7.1",
     "underscore": "~1.4.3",
     "node-uuid": "*",
-    "jade": "*"
+    "jade": "*",
+    "detector": "*"
   },
   "spm": {
     "alias": {

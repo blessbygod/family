@@ -86,6 +86,7 @@ var getPokersType = function(pokers){
   return null;
 };
 
+//两副牌进行比较
 exports.compare = function(apokers, bpokers){
   var atype = getPokersType(apokers),
       btype = getPokersType(bpokers);

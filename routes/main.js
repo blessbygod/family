@@ -7,15 +7,21 @@ var uuid = require('node-uuid');
 var Table = require('../modules/Table.js').Table;
 var filter = require('../modules/filter.js').filter;
 var config = require('../config.js');
+var detector = require("detector");
 
-/*
- * table 
- * add timeline
- * */
+
+//index,togglelist
+exports.index = function(req, res){
+    var ua = req.headers['user-agent'];
+    console.log(detector.parse(ua));
+    res.render('main');
+};
+
+//poker main page
 exports.info = function(req, res){
   var pokers = new Table().pokers.splice(0,7);
   var _filter = new filter(pokers);
-  res.render('main', {
+  res.render('poker', {
         title: 'TexasPoker Online 2013',
         author:'senli',
         pokers : _filter.pokers,
