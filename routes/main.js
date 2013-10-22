@@ -13,7 +13,6 @@ var detector = require("detector");
 //index,togglelist
 exports.index = function(req, res){
     var ua = req.headers['user-agent'];
-    console.log(detector.parse(ua));
     res.render('main');
 };
 
