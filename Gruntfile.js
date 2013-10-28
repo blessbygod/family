@@ -37,7 +37,7 @@ module.exports = function(grunt){
             javascripts:{
                 options:{
                     debug: false,
-                    idleading: 'http://www.lichenfan.com:3000/javascripts/'
+                    idleading: '/javascripts/'
                 },
                 files:[
                     {
