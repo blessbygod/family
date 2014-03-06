@@ -13,6 +13,9 @@ toggleList
             set: fn
         });
     来实现数据改变或者获取的监控， 做到了M - V;
+    propertychange DOM事件的监听，实现当DOM节点属性改变触发事件
+    // FF 的HTMLElement.prototype.___definGetter__
+    //MutationObserve
     完整的其实就是 M - V - M 的过程；
     V-M-V， 在搜索框输入数据，改变对应数据的值，触发view的rerender
 
@@ -23,6 +26,7 @@ toggleList
     可能有些概念或者场景模糊的地方
     后续使用多了添加例子
 
+    IE, avalon用的VBScript来实现的MVVM
 texaspoker online
 -----------------
   1、目前 views/main.jade.backup 修改为main.jade，可以直接查看online目前的开发状况
