@@ -7,7 +7,7 @@ toggleList
 ----------
 待选-已选列表
   1、  每次面试都是一次学习的机会
-  2、  14年3月2日， 对MVVM有了深入的认识，
+  2、  14年3月2日， 对MVVM有了更多的认识！ 悲剧了，以后不清楚的绝对不说，尴尬!
     利用Object.defineProperty(object, key, {
             get: fn,
             set: fn
