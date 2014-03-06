@@ -6,8 +6,22 @@ Family
 toggleList
 ----------
 待选-已选列表
-    1、
+  1、  每次面试都是一次学习的机会
+  2、  14年3月2日， 对MVVM有了深入的认识，
+    利用Object.defineProperty(object, key, {
+            get: fn,
+            set: fn
+        });
+    来实现数据改变或者获取的监控， 做到了M - V;
+    完整的其实就是 M - V - M 的过程；
+    V-M-V， 在搜索框输入数据，改变对应数据的值，触发view的rerender
 
+    V-M， 界面上删除添加DOM结构，监听事件， 数据改变
+    核心还是绑定这个字
+    就是通过绑定事件监控和数据对象的get,set触发 事件
+
+    可能有些概念或者场景模糊的地方
+    后续使用多了添加例子
 
 texaspoker online
 -----------------
