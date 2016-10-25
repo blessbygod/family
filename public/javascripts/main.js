@@ -2,7 +2,7 @@ define("/javascripts/main", [], function(require) {
     require("plugins/jquery.togglelist");
     var from_list = [];
     var to_list = [];
-    for (var i = 0; i < 800; i++) {
+    for (var i = 0; i < 100000; i++) {
         from_list.push({
             email: "email_" + i + "@domain_" + i + ".com",
             id: "id_" + i,
@@ -24,7 +24,7 @@ define("/javascripts/main", [], function(require) {
 
 /*
  * pagination plugins:
- * 
+ *
  * 1. 灵活定制分页，UI,CSS,ACTION 分离
  * 2. 目前支持给定容器填充
  * */
@@ -705,7 +705,7 @@ define("/javascripts/plugins/jquery.togglelist", [], function(require) {
     this._ = require("underscore");
     this.jQuery = require("jquery");
     //     Backbone.js 1.0.0
-    //     
+    //
     //     (c) 2010-2013 Jeremy Ashkenas, DocumentCloud Inc.
     //     Backbone may be freely distributed under the MIT license.
     //     For all details and documentation:
